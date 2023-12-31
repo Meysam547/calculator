@@ -32,7 +32,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageSate extends State {
-  int fNum = 0;
+  double fNum = 0;
+  String showNumber = "";
+  String operation = '';
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class MyHomePageSate extends State {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.only(left: 15),
               child: Text(
-                fNum.toString(),
+                showNumber,
                 style: TextStyle(fontSize: 26, letterSpacing: 5, fontFamily: ''),
               ),
               height: 60,
@@ -77,12 +79,23 @@ class MyHomePageSate extends State {
                   MyButton(
                     i.toString(),
                     onClick: () {
-                      fNum = i;
+                      if (operation == "=") {
+                        showNumber = '';
+                        operation = '';
+                      }
+                      setState(() {
+                        showNumber += i.toString();
+                      });
                     },
                   ),
                 MyButton(
                   '÷',
-                  onClick: () {},
+                  onClick: () {
+                    fNum = double.parse(showNumber);
+                    showNumber = '';
+                    operation = "÷";
+                    setState(() {});
+                  },
                 )
               ],
             ),
@@ -94,12 +107,23 @@ class MyHomePageSate extends State {
                   MyButton(
                     i.toString(),
                     onClick: () {
-                      fNum = i;
+                      if (operation == "=") {
+                        showNumber = '';
+                        operation = '';
+                      }
+                      setState(() {
+                        showNumber += i.toString();
+                      });
                     },
                   ),
                 MyButton(
                   '×',
-                  onClick: () {},
+                  onClick: () {
+                    fNum = double.parse(showNumber);
+                    showNumber = '';
+                    operation = "×";
+                    setState(() {});
+                  },
                 )
               ],
             ),
@@ -110,11 +134,24 @@ class MyHomePageSate extends State {
                 for (int i = 1; i < 4; i++)
                   MyButton(
                     i.toString(),
-                    onClick: () {},
+                    onClick: () {
+                      if (operation == "=") {
+                        showNumber = '';
+                        operation = '';
+                      }
+                      setState(() {
+                        showNumber += i.toString();
+                      });
+                    },
                   ),
                 MyButton(
                   '-',
-                  onClick: () {},
+                  onClick: () {
+                    fNum = double.parse(showNumber);
+                    showNumber = '';
+                    operation = "-";
+                    setState(() {});
+                  },
                 ),
               ],
             ),
@@ -123,7 +160,13 @@ class MyHomePageSate extends State {
               children: [
                 MyButton(
                   '0',
-                  onClick: () {},
+                  onClick: () {
+                    setState(() {
+                      if (showNumber.length > 0) {
+                        showNumber += '0';
+                      }
+                    });
+                  },
                 ),
                 MyButton(
                   '.',
@@ -131,11 +174,41 @@ class MyHomePageSate extends State {
                 ),
                 MyButton(
                   '+',
-                  onClick: () {},
+                  onClick: () {
+                    fNum = double.parse(showNumber);
+                    showNumber = '';
+                    operation = "+";
+                    setState(() {});
+                  },
                 ),
                 MyButton(
                   '=',
-                  onClick: () {},
+                  onClick: () {
+                    int sNum = int.parse(showNumber);
+                    switch (operation) {
+                      case "+":
+                        setState(() {
+                          showNumber = (fNum + sNum).toString();
+                          operation = '=';
+                        });
+
+                      case "-":
+                        setState(() {
+                          showNumber = (fNum - sNum).toString();
+                          operation = '=';
+                        });
+                      case "×":
+                        setState(() {
+                          showNumber = (fNum * sNum).toString();
+                          operation = '=';
+                        });
+                      case "÷":
+                        setState(() {
+                          showNumber = (fNum / sNum).toString();
+                          operation = '=';
+                        });
+                    }
+                  },
                   color: Colors.orange,
                   txtColor: Colors.white,
                 )
